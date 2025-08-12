@@ -14,6 +14,9 @@ public class Article
     
     [BsonElement("content")]
     public string Content { get; set; } = null!;
+    
+    [BsonElement("like")]
+    public int Like { get; set; } = 0;
 
     [BsonElement("publishedAt")]
     public DateTime PublishedAt { get; set; }

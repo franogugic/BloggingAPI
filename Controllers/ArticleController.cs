@@ -27,7 +27,6 @@ public class ArticleController : ControllerBase
     //ovo je polje koje cemo koristiti za pozivanje metoda servisa
     // tj. preko njega cemo pozivati metode servisa
     private readonly ArticleService _articlesServices;
-    
     public ArticleController(ArticleService articlesServices)
     {
         // postavimo articlesServies u _art...    
@@ -44,17 +43,16 @@ public class ArticleController : ControllerBase
     {
         //u article se sprema retultat metode iz servisa
         var articles = await _articlesServices.GetAsync();
-        Console.WriteLine($"Fetched {articles.Count} articles from database.");
-
-        foreach (var article in articles)
-        {
-            Console.WriteLine(article.Title);
-        }
-
-        
         //vraca HTTP odoovor sa json bodyem koji sadzi sve articles
         return Ok(articles);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Article>> Get(string id)
+    {
+        var article = await _articlesServices.GetAsync(id);
+        return article;
+    }    
 
     [HttpPost]
     //Post metoda poziva se automatski
@@ -99,5 +97,46 @@ public class ArticleController : ControllerBase
         return NoContent(); // 204 - uspješno obrisano, bez tijela odgovora
     }
 
+    [HttpPost("{id}/like")]
+    public async Task<ActionResult<Article>> LikeArticle(string id)
+    {
+        var liked = await _articlesServices.LikeAsync(id);
+        return Ok(liked);
+    }
+    //OVO BI BILO SORTIRANJE KAD BI SLALI BODY 
+    //[HttpPost("sort")]
+    //public async Task<ActionResult<List<Article>>> Sort(List<SortCriteria> criteria)
+    //{
+    //    var sortedArticles = await _articlesServices.SortByAsync(criteria);
+    //    return Ok(sortedArticles);
+    //}
+    //A OVO JE PREKO URLA
 
-}
+    [HttpGet("sort")]
+    //FormQuerz kaye da uzme URL i to onaj dio iza ?
+    //aL ist<string> sort, pomocu njega ce aspnet sve vrijednosti sort prikupiti u listu stringova
+    
+    //GET /api/article/sort?sort=title.asc&sort=publishedAt.desc
+    // ovo je primjer URL
+    public async Task<ActionResult<List<Article>>> Sort([FromQuery] List<string> sort)
+    {
+        //kada dodje dovde sort je list stringova koji izlgedaju tipa
+        //title.desc
+        
+        //Select korisitmo da pristupimo svakom elementu liste
+        var criteria = sort.Select(s =>
+        {
+            //Razdvvojimo sort u polje
+            var parts = s.Split('.');
+            //i napravimo novi sortscriteria i spremimo title i direction
+            return new SortCriteria { Field = parts[0], Direction = parts[1] };
+
+            //I vratimo sve u listu koju saljemo servicesu
+        }).ToList();
+
+        //pozovemo SortByAsync fukciju i posljedimo joj criteria
+        var sortedArticles = await _articlesServices.SortByAsync(criteria);
+
+        return Ok(sortedArticles);
+    }
+}   

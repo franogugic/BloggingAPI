@@ -39,3 +39,4 @@
 /Users/franogugic/Desktop/20 Backend Projects/PersonalBloggingPlatformAPI/PersonalBloggingPlatformAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
 /Users/franogugic/Desktop/20 Backend Projects/PersonalBloggingPlatformAPI/PersonalBloggingPlatformAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/franogugic/Desktop/20 Backend Projects/PersonalBloggingPlatformAPI/PersonalBloggingPlatformAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Users/franogugic/Desktop/20 Backend Projects/PersonalBloggingPlatformAPI/PersonalBloggingPlatformAPI/obj/Debug/net9.0/PersonalBloggingPlatformAPI.sourcelink.json
